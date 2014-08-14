@@ -1,0 +1,1646 @@
+
+  |===========================                                                                                                             |  20%
+
+| Here is a plot of Galton's data, a set of 928 parent/child height pairs. Moms' and dads' heights were averaged together (after moms' heights
+| were adjusted by a factor of 1.08). In our plot we used the R function "jitter" on the children's heights to highlight heights that occurred
+| most frequently. The dark spots in each column rise from left to right suggesting that children's heights do depend on their parents'. Tall
+| parents have tall children and short parents have short children.
+
+...0
+
+  |==================================                                                                                                      |  25%
+
+| Here we add a red (45 degree) line of slope 1 and intercept 0 to the plot. If children tended to be the same height as their parents, we would
+| expect the data to vary evenly about this line. We see this isn't the case. On the left half of the plot we see a concentration of heights
+| above the line, and on the right half we see the concentration below the line.
+
+...0
+
+  |=========================================                                                                                               |  30%
+
+| Now we've added a blue regression line to the plot. This is the line which has the minimum variation of the data around it. (For theory see the
+| slides.) Its slope is greater than zero indicating that parents' heights do affect their children's. The slope is also less than 1 as would
+| have been the case if children tended to be the same height as their parents.
+
+...quit
+
+  |================================================                                                                                        |  35%
+
+| Now's your chance to plot in R. Type "plot(child ~ parent, galton)" at the R prompt.
+
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> swirl(
++ )
+
+| Welcome to swirl!
+
+| Please sign in. If you've been here before, use the same name as you did then. If you are new, call yourself something unique.
+
+What shall I call you? Eduardo
+
+| Would you like to continue with one of these lessons?
+
+1: Regression Models Introduction
+2: No. Let me start something new.
+
+Selection: 1
+
+| Attemping to load lesson dependencies...
+
+| Package ‘UsingR’ loaded correctly!
+
+| Package ‘MASS’ loaded correctly!
+
+
+
+| Now's your chance to plot in R. Type "plot(child ~ parent, galton)" at the R prompt.
+
+> plot(child ~ parent, galton)
+
+| You're the best!
+
+  |======================================================                                                                                  |  40%
+
+| You'll notice that this plot looks a lot different than the original we displayed. Why? Many people are the same height to within measurement error, so
+| points fall on top of one another. You can see that some circles appear darker than others. However, by using R's function "jitter" on the children's
+| heights, we can spread out the data to simulate the measurement errors and make high frequency heights more visible.
+
+...
+
+  |=============================================================                                                                           |  45%
+
+| Now it's your turn to try. Just type "plot(jitter(child,4) ~ parent,galton)" and see the magic.
+
+> plot(jitter(child,4) ~ parent,galton)
+
+| That's the answer I was looking for.
+
+  |====================================================================                                                                    |  50%
+
+| Now for the regression line. This is quite easy in R. The function lm (linear model) needs a "formula" and dataset. You can type "?formula" for more
+| information, but, in simple terms, we just need to specify the dependent variable (children's heights) ~ the independent variable (parents' heights).
+
+...
+
+  |===========================================================================                                                             |  55%
+
+| So generate the regression line and store it in the variable regrline. Type "regrline <- lm(child ~ parent, galton)"
+
+> regrline <- lm(child ~ parent, galton)
+
+| You are really on a roll!
+
+  |==================================================================================                                                      |  60%
+
+| Now add the regression line to the plot with "abline". Make the line wide and red for visibility. Type "abline(regrline, lwd=3, col='red')"
+
+> abline(regrline, lwd=3, col='red')
+
+| Excellent work!
+
+  |========================================================================================                                                |  65%
+
+| The regression line will have a slope and intercept which are estimated from data. Estimates are not exact. Their accuracy is gauged by theoretical
+| techniques and expressed in terms of "standard error." You can use "summary(regrline)" to examine the Galton regression line. Do this now.
+
+> 
+> summary(regrline)
+
+Call:
+lm(formula = child ~ parent, data = galton)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.8050 -1.3661  0.0487  1.6339  5.9264 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 23.94153    2.81088   8.517   <2e-16 ***
+parent       0.64629    0.04114  15.711   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.239 on 926 degrees of freedom
+Multiple R-squared:  0.2105,	Adjusted R-squared:  0.2096 
+F-statistic: 246.8 on 1 and 926 DF,  p-value: < 2.2e-16
+
+
+| You got it!
+
+  |===============================================================================================                                         |  70%
+
+| The slope of the line is the estimate of the coefficient, or muliplier, of "parent", the independent variable of our data (in this case, the parents'
+| heights). From the output of "summary" what is the slope of the regression line?
+
+1: 23.94153
+2: .64629
+3: .04114
+
+Selection: 1
+
+| Not quite! Try again.
+
+| Look at the line labelled "parent" and the column "Estimate"
+
+1: .64629
+2: .04114
+3: 23.94153
+
+Selection: 2
+
+| Almost! Try again.
+
+| Look at the line labelled "parent" and the column "Estimate"
+
+1: .64629
+2: 23.94153
+3: .04114
+
+Selection: 1
+
+| That's the answer I was looking for.
+
+  |======================================================================================================                                  |  75%
+
+| What is the standard error of the slope?
+
+1: 23.94153
+2: .64629
+3: .04114
+
+Selection: 2
+
+| Not quite right, but keep trying.
+
+| Look at the line labelled "parent" and the column "Std. Error."
+
+1: 23.94153
+2: .64629
+3: .04114
+
+Selection: 3
+
+| You are really on a roll!
+
+  |=============================================================================================================                           |  80%
+
+| A coefficient will be within 2 standard errors of its estimate about 95% of the time. This means the slope of our regression is significantly different
+| than either 0 or 1 since (.64629) +/- (2*.04114) is near neither 0 nor 1.
+
+...
+
+  |====================================================================================================================                    |  85%
+
+| We're now adding two blue lines to indicate the means of the children's heights (horizontal) and the parents' (vertical). Note that these lines and the
+| regression line all intersect in a point. Pretty cool, huh? We'll talk more about this in a later lesson. (Something you can look forward to.)
+
+...
+
+  |==========================================================================================================================              |  90%
+
+| The slope of a line shows how much of a change in the vertical direction is produced by a change in the horizontal direction. So, parents "1 inch"
+| above the mean in height tend to have children who are only .65 inches above the mean. The green triangle illustrates this point. From the mean, moving
+| a "1 inch distance" horizontally to the right (increasing the parents' height) produces a ".65 inch" increase in the vertical direction (children's
+| height).
+
+...
+
+  |=================================================================================================================================       |  95%
+
+| Similarly, parents who are 1 inch below average in height have children who are only .65 inches below average height. The purple triangle illustrates
+| this. From the mean, moving a "1 inch distance" horizontally to the left (decreasing the parents' height) produces a ".65 inch" decrease in the
+| vertical direction (children's height).
+
+...
+
+  |========================================================================================================================================| 100%
+
+| This concludes our lesson on regression toward the mean. We hope you found it above average!
+
+...
+
+| Are you currently enrolled in the Coursera course associated with this lesson?
+
+1: Yes
+2: No
+
+Selection: 1
+
+| Would you like me to notify Coursera that you've completed this lesson? If so, I'll need to get some more info from you.
+
+1: Yes
+2: No
+3: Maybe later
+
+Selection: 1
+
+| The first item I need is your Course ID. For example, if the homepage for your Coursera course was 'https://class.coursera.org/rprog-001', then your
+| course ID would be 'rprog-001' (without the quotes).
+
+Course ID: regmods-004
+Submission login (email): edu.private@gmail.com
+Submission password: j2gWUkyd56
+
+| Is the following information correct?
+
+Course ID: regmods-004
+Submission login (email): edu.private@gmail.com
+Submission password: j2gWUkyd56
+
+1: Yes, go ahead!
+2: No, I need to change something.
+
+Selection: 1
+
+| I'll try to tell Coursera you've completed this lesson now.
+
+| Great work!
+
+| I've notified Coursera that you have completed regmods-004, Introduction.
+
+| You've reached the end of this lesson! Returning to the main menu...
+
+| Please choose a course, or type 0 to exit swirl.
+
+1: Data Analysis
+2: Regression Models
+3: R Programming
+4: Take me to the swirl course repository!
+
+Selection: 2
+
+| Please choose a lesson, or type 0 to return to course menu.
+
+ 1: Introduction                               2: Residuals                                  3: Least Squares Estimation                
+ 4: Residual Variation                         5: Introduction to Multivariable Regression   6: MultiVar Examples                       
+ 7: MultiVar Examples2                         8: MultiVar Examples3                         9: Residuals Diagnostics and Variation     
+10: Variance Inflation Factors                11: Overfitting and Underfitting              12: Binary Outcomes                         
+13: Count Outcomes                            
+
+Selection: 2
+
+  |                                                                                                                                                |   0%
+
+| Residuals. (Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses. If you care to
+| use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to Regression_Models/01_03_ols.)
+
+...
+
+  |=====                                                                                                                                           |   3%
+
+| This lesson will focus on the residuals, the distances between the actual children's heights and the estimates given by the regression line. Since all
+| lines are characterized by two parameters, a slope and an intercept, we'll use the least squares criteria to provide two equations in two unknowns so
+| we can solve for these parameters, the slope and intercept.
+
+...
+
+  |=========                                                                                                                                       |   6%
+
+| The first equation says that the "errors" in our estimates, the residuals, have mean zero. In other words, the residuals are "balanced" among the data
+| points; they're just as likely to be positive as negative. The second equation says that our residuals must be uncorrelated with our predictors, the
+| parents’ height. This makes sense - if the residuals and predictors were correlated then you could make a better prediction and reduce the distances
+| (residuals) between the actual outcomes and the predictions.
+
+...
+
+  |==============                                                                                                                                  |  10%
+
+| We'll demonstrate these concepts now. First regenerate the regression line and call it fit. Use the R function lm. Recall that by default its first
+| argument is a formula such as "child ~ parent" and its second is the dataset, in this case galton.
+
+> 
+> lm(child ~ parent, galton)
+
+Call:
+lm(formula = child ~ parent, data = galton)
+
+Coefficients:
+(Intercept)       parent  
+    23.9415       0.6463  
+
+
+| That's not the answer I was looking for, but try again. Or, type info() for more options.
+
+| Type "fit <- lm(child ~ parent, galton)" at the R prompt.
+
+> fit <- lm(child ~ parent, galton)
+
+| All that practice is paying off!
+
+  |===================                                                                                                                             |  13%
+
+| Now we'll examine fit to see its slope and intercept. The residuals we're interested in are stored in the 928-long vector fit$residuals. If you type
+| fit$residuals you'll see a lot of numbers scroll by which isn't very useful; however if you type "summary(fit)" you will see a more concise display of
+| the regression data. Do this now.
+
+> summary(fit)
+
+Call:
+lm(formula = child ~ parent, data = galton)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.8050 -1.3661  0.0487  1.6339  5.9264 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 23.94153    2.81088   8.517   <2e-16 ***
+parent       0.64629    0.04114  15.711   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.239 on 926 degrees of freedom
+Multiple R-squared:  0.2105,	Adjusted R-squared:  0.2096 
+F-statistic: 246.8 on 1 and 926 DF,  p-value: < 2.2e-16
+
+
+| Excellent work!
+
+  |=======================                                                                                                                         |  16%
+
+| First check the mean of fit$residuals to see if it's close to 0.
+
+> mean(fit$residuals)
+[1] -1.880395e-15
+
+| Excellent work!
+
+  |============================                                                                                                                    |  19%
+
+| Now check the correlation between the residuals and the predictors. Type "cov(fit$residuals, galton$parent)" to see if it's close to 0.
+
+> cov(fit$residuals, galton$parent)
+[1] -1.767817e-13
+
+| You are really on a roll!
+
+  |=================================                                                                                                               |  23%
+
+| As shown algebraically in the slides, the equations for the intercept and slope are found by supposing a change is made to the intercept and slope.
+| Squaring out the resulting expressions produces three summations. The first sum is the original term squared, before the slope and intercept were
+| changed. The third sum totals the squared changes themselves. For instance, if we had changed fit’s intercept by adding 2, the third sum would be the
+| total of 928 4’s. The middle sum is guaranteed to be zero precisely when the two equations (the conditions on the residuals) are satisfied.
+
+...
+
+  |=====================================                                                                                                           |  26%
+
+| We'll verify these claims now. We've defined for you two R functions, est and sqe. Both take two inputs, a slope and an intercept. The function est
+| calculates a child's height (y-coordinate) using the line defined by the two parameters, (slope and intercept), and the parents' heights in the Galton
+| data as x-coordinates.
+
+...
+
+  |==========================================                                                                                                      |  29%
+
+| Let "mch"" represent the mean of the galton childrens' heights and "mph"" the mean of the galton parents' heights. Let "ic" and "slope" represent the
+| intercept and slope of the regression line respectively. As shown in the slides and past lessons, the point (mph,mch) lies on the regression line. This
+| means
+
+1: I haven't the slightest idea.
+2: mph = ic + slope*mch
+3: mch = ic + slope*mph
+
+Selection: 3
+
+| You are quite good my friend!
+
+  |==============================================                                                                                                  |  32%
+
+| The function sqe calculates the sum of the squared residuals, the differences between the actual children's heights and the estimated heights specified
+| by the line defined by the given parameters (slope and intercept).  R provides the function deviance to do exactly this using a fitted model (e.g.,
+| fit) as its argument. However, we provide sqe because we'll use it to test regression lines different from fit.
+
+...
+
+  |===================================================                                                                                             |  35%
+
+| We'll see that when we vary or tweak the slope and intercept values of the regression line which are stored in fit$coef, the resulting squared
+| residuals are approximately equal to the sum of two sums of squares - that of the original regression residuals and that of the tweaks themselves. More
+| precisely, up to numerical error,
+
+...
+
+  |========================================================                                                                                        |  39%
+
+| sqe(ols.slope+sl,ols.intercept+ic) == deviance(fit) + sum(est(sl,ic)ˆ2 )
+
+...
+
+  |============================================================                                                                                    |  42%
+
+| Equivalently, sqe(ols.slope+sl,ols.intercept+ic) == sqe(ols.slope, ols.intercept) + sum(est(sl,ic)ˆ2 )
+
+...
+
+  |=================================================================                                                                               |  45%
+
+| The left side of the equation represents the squared residuals of a new line, the "tweaked" regression line. The terms "sl" and "ic" represent the
+| variations in the slope and intercept respectively. The right side has two terms. The first represents the squared residuals of the original regression
+| line and the second is the sum of squares of the variations themselves.
+
+...
+
+  |======================================================================                                                                          |  48%
+
+| We'll demonstrate this now. First extract the intercept from fit$coef and put it in a variable called ols.ic . The intercept is the first element in
+| the fit$coef vector, that is fit$coef[1].
+
+> ols.ic <-  fit$coef[1]
+
+| You got it!
+
+  |==========================================================================                                                                      |  52%
+
+| Now extract the slope from fit$coef and put it in the variable ols.slope; the slope is the second element in the fit$coef vector, fit$coef[2].
+
+> ols.slope <- fit$coef[2]
+
+| You're the best!
+
+  |===============================================================================                                                                 |  55%
+
+| Now we'll show you some R code which generates the left and right sides of this equation.  Take a moment to look it over. We've formed two 6-long
+| vectors of variations, one for the slope and one for the intercept. Then we have two "for" loops to generate the two sides of the equation.
+
+...
+
+  |====================================================================================                                                            |  58%
+
+| Subtract the right side, the vector rhs, from the left, the vector lhs, to see the relationship between them. You should get a vector of very small,
+| almost 0, numbers.
+
+> 
+> lhs <- lhs - rhs
+
+| Not quite right, but keep trying. Or, type info() for more options.
+
+| Type "lhs-rhs" at the R prompt.
+
+> lhs-rhs
+[1]  1.263288e-09  2.522029e-09  3.816240e-09 -1.260560e-09 -2.531124e-09 -3.788955e-09
+
+| You are quite good my friend!
+
+  |========================================================================================                                                        |  61%
+
+| You could also use the R function all.equal with lhs and rhs as arguments to test for equality. Try it now.
+
+> all.equal(lhs, rhs)
+[1] TRUE
+
+| All that practice is paying off!
+
+  |=============================================================================================                                                   |  65%
+
+| Now we'll show that the variance in the children's heights is the sum of the variance in the OLS estimates and the variance in the OLS residuals. First
+| use the R function var to calculate the variance in the children's heights and store it in the variable varChild.
+
+> varChild <- var(ols)
+Error in is.data.frame(x) : object 'ols' not found
+> varChild <- var(ols.ic)
+
+| You almost had it, but not quite. Try again. Or, type info() for more options.
+
+| Type "varChild <- var(galton$child)" at the R prompt.
+
+> varChild <- var(galton$child)
+
+| You are amazing!
+
+  |==================================================================================================                                              |  68%
+
+| Remember that we've calculated the residuals and they're stored in fit$residuals. Use the R function var to calculate the variance in these residuals
+| now and store it in the variable varRes.
+
+> varRes <- var(fit$residuals)
+
+| Excellent job!
+
+  |======================================================================================================                                          |  71%
+
+| Recall that the function "est" calculates the estimates (y-coordinates) of values along the regression line defined by the variables "ols.slope" and
+| "ols.ic". Compute the variance in the estimates and store it in the variable varEst.
+
+> varEst <- est(ols.slope)
+Error in est(ols.slope) : 
+  argument "intercept" is missing, with no default
+> varEst <- est(ols.slope, "ols.ic)
++ 
++ varEst <- est(ols.slope, ols.ic)
++ )
++ ""
++ "
+Error: unexpected string constant in:
+"""
+""
+> varEst <- est(ols.slope, ols.ic)
+
+| You almost had it, but not quite. Try again. Or, type info() for more options.
+
+| Type "varEst <- var(est(ols.slope, ols.ic))" at the R prompt.
+
+> varEst <- var(est(ols.slope, ols.ic))
+
+| That's a job well done!
+
+  |===========================================================================================================                                     |  74%
+
+| Now use the function all.equal to compare varChild and the sum of varRes and varEst.
+
+> all.equal(varChild, varEst + varRes)
+[1] TRUE
+
+| Keep working like that and you'll get there!
+
+  |===============================================================================================================                                 |  77%
+
+| Since variances are sums of squares (and hence always positive), this equation which we've just demonstrated, var(data)=var(estimate)+var(residuals),
+| shows that the variance of the estimate is ALWAYS less than the variance of the data.
+
+...
+
+  |====================================================================================================================                            |  81%
+
+| Since var(data)=var(estimate)+var(residuals) and variances are always positive, the variance of residuals
+
+1: is unknown without actual data
+2: is less than the variance of data
+3: is greater than the variance of data
+
+Selection: 2
+
+| Keep up the great work!
+
+  |=========================================================================================================================                       |  84%
+
+| The two properties of the residuals we've emphasized here can be applied to datasets which have multiple predictors. In this lesson we've loaded the
+| dataset attenu which gives data for 23 earthquakes in California. Accelerations are estimated based on two predictors, distance and magnitude.
+
+...
+
+  |=============================================================================================================================                   |  87%
+
+| Generate the regression line for this data. Type efit <- lm(accel ~ mag+dist, attenu) at the R prompt.
+
+> efit <- lm(accel ~ mag+dist, attenu)
+
+| Nice work!
+
+  |==================================================================================================================================              |  90%
+
+| Verify the mean of the residuals is 0.
+
+> mean(efit)
+[1] NA
+Warning message:
+In mean.default(efit) : argument is not numeric or logical: returning NA
+
+| You're close...I can feel it! Try it again. Or, type info() for more options.
+
+| Type "mean(efit$residuals)" at the R prompt.
+
+> mean(efit$residuals)
+[1] -2.143235e-18
+
+| You're the best!
+
+  |=======================================================================================================================================         |  94%
+
+| Using the R function cov verify the residuals are uncorrelated with the magnitude predictor, attenu$mag.
+
+> cov(efit$predictor, attenu$mag)
+Error: is.numeric(x) || is.logical(x) is not TRUE
+> cov(predictor, attenu$mag)
+Error in is.data.frame(x) : object 'predictor' not found
+> cov(attenu$mag)
+Error in cov(attenu$mag) : supply both 'x' and 'y' or a matrix-like 'x'
+> cov(efit$residuals, attenu$mag)
+[1] 5.585751e-17
+
+| You're the best!
+
+  |===========================================================================================================================================     |  97%
+
+| Using the R function cov verify the residuals are uncorrelated with the distance predictor, attenu$dist.
+
+> cov(efit$residuals, attenu$dist)
+[1] 1.769372e-16
+
+| All that hard work is paying off!
+
+  |================================================================================================================================================| 100%
+
+| Congrats! You've finished the course on Residuals. We hope it hasn't left a bad taste in your mouth.
+
+...
+
+| Are you currently enrolled in the Coursera course associated with this lesson?
+
+1: Yes
+2: No
+
+Selection: 1
+
+| Would you like me to notify Coursera that you've completed this lesson? If so, I'll need to get some more info from you.
+
+1: Yes
+2: No
+3: Maybe later
+
+Selection: 1
+
+| Is the following information correct?
+
+Course ID: regmods-004
+Submission login (email): edu.private@gmail.com
+Submission password: j2gWUkyd56
+
+1: Yes, go ahead!
+2: No, I need to change something.
+
+Selection: 1
+
+| I'll try to tell Coursera you've completed this lesson now.
+
+| Great work!
+
+| I've notified Coursera that you have completed regmods-004, Residuals.
+
+| You've reached the end of this lesson! Returning to the main menu...
+
+| Please choose a course, or type 0 to exit swirl.
+
+1: Data Analysis
+2: Regression Models
+3: R Programming
+4: Take me to the swirl course repository!
+
+Selection: 2
+
+| Please choose a lesson, or type 0 to return to course menu.
+
+ 1: Introduction                               2: Residuals                                  3: Least Squares Estimation                
+ 4: Residual Variation                         5: Introduction to Multivariable Regression   6: MultiVar Examples                       
+ 7: MultiVar Examples2                         8: MultiVar Examples3                         9: Residuals Diagnostics and Variation     
+10: Variance Inflation Factors                11: Overfitting and Underfitting              12: Binary Outcomes                         
+13: Count Outcomes                            
+
+Selection: 3
+
+| Attemping to load lesson dependencies...
+
+| Package ‘UsingR’ loaded correctly!
+
+
+Attaching package: ‘manipulate’
+
+The following object is masked from ‘package:aplpack’:
+
+    slider
+
+  |                                                                                                                                                |   0%
+
+| Least Squares Estimation. (Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses.
+| If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to Regression_Models/01_03_ols.)
+
+...
+
+  |========                                                                                                                                        |   6%
+
+| In this lesson, if you're using RStudio, you'll be able to play with some of the code which appears in the slides. If you're not using RStudio, you can
+| look at the code but you won't be able to experiment with the function "manipulate". We provide the code for you so you can examine it without having
+| to type it all out.  In RStudio, when the edit window displays code, make sure your flashing cursor is back in the console window before you hit
+| "Enter" or any keyboard buttons, otherwise you might accidentally alter the code. If you do alter the file, in RStudio, you can hit Ctrl z in the
+| editor until all the unwanted changes disappear. In other editors, you'll have to use whatever key combination performs "undo" to remove all your
+| unwanted changes.
+
+...
+
+  |================                                                                                                                                |  11%
+
+| Here are the Galton data and the regression line seen in the Introduction. We loaded the data with the R command 'galton <- UsingR::galton'. This
+| Galton data is one of the many datasets that R and its package system provide for users. The regression line summarizes the relationship between
+| parents' heights (the predictors) and their childrens' (the outcomes).
+
+...
+
+  |========================                                                                                                                        |  17%
+
+| We learned in the last lesson that the regression line is the line through the data which has the minimum (least) squared "error", the vertical
+| distance between the 928 actual children's heights and the heights predicted by the line. Squaring the distances ensures that data points above and
+| below the line are treated the same. This method of choosing the 'best' regression line (or 'fitting' a line to the data) is known as ordinary least
+| squares.
+
+...
+
+  |================================                                                                                                                |  22%
+
+| As shown in the slides, the regression line contains the point representing the means of the two sets of heights. These are shown by the thin
+| horizontal and vertical lines. The intersection point is shown by the triangle on the plot. Its x-coordinate is the mean of the parents' heights and
+| y-coordinate is the mean of the childrens' heights.
+
+...
+
+  |========================================                                                                                                        |  28%
+
+| As shown in the slides, the slope of the regression line is the correlation between the two sets of heights multiplied by the ratio of the standard
+| deviations (childrens' to parents' or outcomes to predictors).
+
+...
+
+  |================================================                                                                                                |  33%
+
+| Here we show code which demonstrates how changing the slope of the regression line affects the mean squared error between actual and predicted values.
+| Look it over to see how straightforward it is.
+
+...
+
+  |========================================================                                                                                        |  39%
+
+| What RStudio graphics package allows the user to play with the data to see the effects of the changes?
+
+1: plot
+2: manipulate
+3: points
+4: abline
+
+Selection: 2
+
+| That's a job well done!
+
+  |================================================================                                                                                |  44%
+
+| Now you can actually play with the code to use R's manipulate function and find the minimum squared error. You can adjust the slider with the left
+| mouse button or use the right and left arrow keys to see how changing the slope (beta) affects the mean squared error (mse). If the slider disappears
+| you can call it back by clicking on the little gear in the upper left corner of the plot window.
+
+...manipulate(myPlot(beta), beta = slider(0.4, .8, step = 0.02))
+
+  |========================================================================                                                                        |  50%
+
+| Which value of the slope minimizes the mean squared error?
+
+1: 5
+2: .44
+3: .64
+4: .70
+
+Selection: 3
+
+| All that hard work is paying off!
+
+  |================================================================================                                                                |  56%
+
+| What was the minimum mse?
+
+1: .64
+2: .66
+3: 5.0
+4: 44
+
+Selection: 2
+
+| You almost had it, but not quite. Try again.
+
+| You don't want an error that's too big or too small.
+
+1: 44
+2: .64
+3: 5.0
+4: .66
+
+Selection: 1
+
+| That's not the answer I was looking for, but try again.
+
+| You don't want an error that's too big or too small.
+
+1: .66
+2: .64
+3: 44
+4: 5.0
+
+Selection: 5
+Enter an item from the menu, or 0 to exit
+Selection: 4
+
+| Excellent job!
+
+  |========================================================================================                                                        |  61%
+
+| Recall that you normalize data by subtracting its mean and dividing by its standard deviation. We've done this for the galton child and parent data for
+| you. We've stored these normalized values in two vectors, gpa_nor and gch_nor, the normalized galton parent and child data.
+
+...
+
+  |================================================================================================                                                |  67%
+
+| Use R's function "cor" to compute the correlation between these normalized data sets.
+
+> cor(gpa_nor, gch_nor)
+[1] 0.4587624
+
+| Great job!
+
+  |========================================================================================================                                        |  72%
+
+| How does this correlation relate to the correlation of the unnormalized data?
+
+1: It is smaller.
+2: It is the same.
+3: It is bigger.
+
+Selection: 2
+
+| Keep working like that and you'll get there!
+
+  |================================================================================================================                                |  78%
+
+| Use R's function "lm" to generate the regression line using this normalized data. Store it in a variable called l_nor. Use the parents' heights as the
+| predictors (independent variable) and the childrens' as the predicted (dependent). Remember, 'lm' needs a formula of the form dependent ~ independent.
+| Since we've created the data vectors for you there's no need to provide a second "data" argument as you have previously.
+
+> l_nor <- lm(gpa_nor, gch_nor)
+Error in formula.default(object, env = baseenv()) : invalid formula
+> l_nor <- lm(gpa_nor ~ gch_nor)
+
+| Try again. Getting it right on the first try is boring anyway! Or, type info() for more options.
+
+| Type "l_nor <- lm(gch_nor ~ gpa_nor)" at the R prompt.
+
+> l_nor <- lm(gch_nor ~ gpa_nor)
+
+| That's the answer I was looking for.
+
+  |========================================================================================================================                        |  83%
+
+| What is the slope of this line?
+
+1: The correlation of the 2 data sets
+2: 1.
+3: I have no idea
+
+Selection: 1
+
+| That's correct!
+
+  |================================================================================================================================                |  89%
+
+| If you swapped the outcome (Y) and predictor (X) of your original (unnormalized) data, (for example, used childrens' heights to predict their parents),
+| what would the slope of the new regression line be?
+
+1: 1.
+2: the same as the original
+3: correlation(X,Y) * sd(X)/sd(Y)
+4: I have no idea
+
+Selection: 3
+
+| Nice work!
+
+  |========================================================================================================================================        |  94%
+
+| We'll close with a final display of source code from the slides. It plots the galton data with three regression lines, the original in red with the
+| children as the outcome, a new blue line with the parents' as outcome and childrens' as predictor, and a black line with the slope scaled so it equals
+| the ratio of the standard deviations.
+
+...
+
+  |================================================================================================================================================| 100%
+
+| Congrats! You've concluded this lesson on ordinary least squares which are truly extraordinary!
+
+...
+
+| Are you currently enrolled in the Coursera course associated with this lesson?
+
+1: Yes
+2: No
+
+Selection: 1
+
+| Would you like me to notify Coursera that you've completed this lesson? If so, I'll need to get some more info from you.
+
+1: Yes
+2: No
+3: Maybe later
+
+Selection: 1
+
+| Is the following information correct?
+
+Course ID: regmods-004
+Submission login (email): edu.private@gmail.com
+Submission password: j2gWUkyd56
+
+1: Yes, go ahead!
+2: No, I need to change something.
+
+Selection: 1
+
+| I'll try to tell Coursera you've completed this lesson now.
+
+| Great work!
+
+| I've notified Coursera that you have completed regmods-004, Least_Squares_Estimation.
+
+| You've reached the end of this lesson! Returning to the main menu...
+
+| Please choose a course, or type 0 to exit swirl.
+
+1: Data Analysis
+2: Regression Models
+3: R Programming
+4: Take me to the swirl course repository!
+
+Selection: 2
+
+| Please choose a lesson, or type 0 to return to course menu.
+
+ 1: Introduction                               2: Residuals                                  3: Least Squares Estimation                
+ 4: Residual Variation                         5: Introduction to Multivariable Regression   6: MultiVar Examples                       
+ 7: MultiVar Examples2                         8: MultiVar Examples3                         9: Residuals Diagnostics and Variation     
+10: Variance Inflation Factors                11: Overfitting and Underfitting              12: Binary Outcomes                         
+13: Count Outcomes                            
+
+Selection: 4
+
+| Attemping to load lesson dependencies...
+
+| Package ‘UsingR’ loaded correctly!
+
+  |                                                                                                                                                |   0%
+
+| Residual Variation. (Slides for this and other Data Science courses may be found at github https://github.com/DataScienceSpecialization/courses. If you
+| care to use them, they must be downloaded as a zip file and viewed locally. This lesson corresponds to Regression_Models/01_06_residualVariation.)
+
+...
+
+  |=======                                                                                                                                         |   5%
+
+| As shown in the slides, residuals are useful for indicating how well data points fit a statistical model. They "can be thought of as the outcome (Y)
+| with the linear association of the predictor (X) removed. One differentiates residual variation (variation after removing the predictor) from
+| systematic variation (variation explained by the regression model)."
+
+...
+
+  |==============                                                                                                                                  |  10%
+
+| It can also be shown that, given a model, the maximum likelihood estimate of the variance of the random error is the average squared residual. However,
+| since our linear model with one predictor requires two parameters we have only (n-2) degrees of freedom. Therefore, to calculate an "average" squared
+| residual to estimate the variance we use the formula 1/(n-2) * (the sum of the squared residuals). If we divided the sum of the squared residuals by n,
+| instead of n-2, the result would give a biased estimate.
+
+...
+
+  |=====================                                                                                                                           |  14%
+
+| To see this we'll use our favorite Galton height data. First regenerate the regression line and call it fit. Use the R function lm and recall that by
+| default its first argument is a formula such as "child ~ parent" and its second is the dataset, in this case galton.
+
+> fit <- lm(child ~ parent, data=galton)
+
+| Not exactly. Give it another go. Or, type info() for more options.
+
+| Type "fit <- lm(child ~ parent, galton)" at the R prompt.
+
+> fit <- lm(child ~ parent, galton)
+
+| Nice work!
+
+  |===========================                                                                                                                     |  19%
+
+| First, we'll use the residuals (fit$residuals) of our model to estimate the standard deviation (sigma) of the error. We've already defined n for you as
+| the number of points in Galton's dataset (928).
+
+...
+
+  |==================================                                                                                                              |  24%
+
+| Calculate the sum of the squared residuals divided by the quantity (n-2).  Then take the square root.
+
+> sqrt(sum(fit$residuals^2)/(n-2))
+[1] 2.238547
+
+| All that hard work is paying off!
+
+  |=========================================                                                                                                       |  29%
+
+| Now look at the "sigma" portion of the summary of fit, "summary(fit)$sigma".
+
+> summary(fit)$sigma
+[1] 2.238547
+
+| You're the best!
+
+  |================================================                                                                                                |  33%
+
+| Pretty cool, huh?
+
+...
+
+  |=======================================================                                                                                         |  38%
+
+| Another cool thing - take the sqrt of "deviance(fit)/(n-2)" at the R prompt.
+
+> sqrt(deviance(fit)/(n-2))
+[1] 2.238547
+
+| Great job!
+
+  |==============================================================                                                                                  |  43%
+
+| Another useful fact shown in the slides was
+
+...
+
+  |=====================================================================                                                                           |  48%
+
+| Total Variation = Residual Variation + Regression Variation
+
+...
+
+  |===========================================================================                                                                     |  52%
+
+| Recall the beauty of the slide full of algebra which proved this fact. It had a bunch of Y's, some with hats and some with bars and several summations
+| of squared values. The Y's with hats were the estimates provided by the model. (They were on the regression line.) The Y with the bar was the mean or
+| average of the data. Which sum of squared term represented Total Variation?
+
+1: Yi-mean(Yi)
+2: Yi-Yi_hat
+3: Yi_hat-mean(Yi)
+
+Selection: 3
+
+| You're close...I can feel it! Try it again.
+
+| Pick the choice which is independent of the estimated or predicted values, the (hat terms).
+
+1: Yi-Yi_hat
+2: Yi_hat-mean(Yi)
+3: Yi-mean(Yi)
+
+Selection: 1
+
+| Not exactly. Give it another go.
+
+| Pick the choice which is independent of the estimated or predicted values, the (hat terms).
+
+1: Yi-mean(Yi)
+2: Yi-Yi_hat
+3: Yi_hat-mean(Yi)
+
+Selection: 2
+
+| Keep trying!
+
+| Pick the choice which is independent of the estimated or predicted values, the (hat terms).
+
+1: Yi-mean(Yi)
+2: Yi_hat-mean(Yi)
+3: Yi-Yi_hat
+
+Selection: 3
+
+| Try again. Getting it right on the first try is boring anyway!
+
+| Pick the choice which is independent of the estimated or predicted values, the (hat terms).
+
+1: Yi-Yi_hat
+2: Yi-mean(Yi)
+3: Yi_hat-mean(Yi)
+
+Selection: 2
+
+| That's correct!
+
+  |==================================================================================                                                              |  57%
+
+| Which sum of squared term represents Residual Variation?
+
+1: Yi-Yi_hat
+2: Yi-mean(Yi)
+3: Yi_hat-mean(Yi)
+
+Selection: 1
+
+| Excellent work!
+
+  |=========================================================================================                                                       |  62%
+
+| The term R^2 represents the percent of total variation described by the model, the regression variation (the term we didn't ask about in the preceding
+| multiple choice questions). Also, since it is a percent we need a ratio or fraction of sums of squares. Let's do this now for our Galton data.
+
+...
+
+  |================================================================================================                                                |  67%
+
+| We'll start with easy steps. Calculate the mean of the children's heights and store it in a variable called mu. Recall that we reference the childrens'
+| heights with the expression 'galton$child' and the parents' heights with the expression 'galton$parent'.
+
+> mu <- mean(galton$child)
+
+| You are doing so well!
+
+  |=======================================================================================================                                         |  71%
+
+| Recall that centering data means subtracting the mean from each data point. Now calculate the sum of the squares of the centered children's heights and
+| store the result in a variable called sTot. This represents the Total Variation of the data.
+
+> sTot <- sum(sqrt(galton$child - mean(galton$child)))
+Warning message:
+In sqrt(galton$child - mean(galton$child)) : NaNs produced
+
+| Not quite right, but keep trying. Or, type info() for more options.
+
+| Type "sTot <- sum((galton$child-mu)^2)" at the R prompt.
+
+> sTot <- sum((galton$child-mu)^2)
+
+| That's the answer I was looking for.
+
+  |==============================================================================================================                                  |  76%
+
+| Now create the variable sRes. Use the R function deviance to calculate the sum of the squares of the residuals. These are the distances between the
+| children's heights and the regression line. This represents the Residual Variation.
+
+> sRes <- deviance(fit$residuals)
+Error: $ operator is invalid for atomic vectors
+> sRes <- deviance(fit)
+
+| Excellent work!
+
+  |=====================================================================================================================                           |  81%
+
+| Finally, the ratio sRes/sTot represents the percent of total variation contributed by the residuals. To find the percent contributed by the model,
+| i.e., the regression variation, subtract the fraction sRes/sTot from 1.  This is the value R^2.
+
+> 1 - sRes/sTot
+[1] 0.2104629
+
+| Excellent work!
+
+  |===========================================================================================================================                     |  86%
+
+| For fun you can compare your result to the values shown in summary(fit)$r.squared to see if it looks familiar. Do this now.
+
+> summary(fit)$r.squared
+[1] 0.2104629
+
+| You got it right!
+
+  |==================================================================================================================================              |  90%
+
+| To see some real magic, compute the square of the correlation of the galton data, the children and parents. Use the R function cor.
+
+> cor(galton$child, galton$parent)
+[1] 0.4587624
+
+| Almost! Try again. Or, type info() for more options.
+
+| Type "cor(galton$parent,galton$child)^2" at the R prompt.
+
+> cor(galton$child, galton$parent)^2
+[1] 0.2104629
+
+| That's the answer I was looking for.
+
+  |=========================================================================================================================================       |  95%
+
+| We'll now summarize useful facts about R^2. It is the percentage of variation explained by the regression model. As a percentage it is between 0 and 1.
+| It also equals the sample correlation squared. However, R^2 doesn't tell the whole story.
+
+...
+
+  |================================================================================================================================================| 100%
+
+| Congrats! You've finished this lesson on Residual Variation.
+
+...
+
+| Are you currently enrolled in the Coursera course associated with this lesson?
+
+1: Yes
+2: No
+
+Selection: 1
+
+| Would you like me to notify Coursera that you've completed this lesson? If so, I'll need to get some more info from you.
+
+1: Yes
+2: No
+3: Maybe later
+
+Selection: 1
+
+| Is the following information correct?
+
+Course ID: regmods-004
+Submission login (email): edu.private@gmail.com
+Submission password: j2gWUkyd56
+
+1: Yes, go ahead!
+2: No, I need to change something.
+
+Selection: 1
+
+| I'll try to tell Coursera you've completed this lesson now.
+
+| Great work!
+
+| I've notified Coursera that you have completed regmods-004, Residual_Variation.
+
+| You've reached the end of this lesson! Returning to the main menu...
+
+| Please choose a course, or type 0 to exit swirl.
+
+1: Data Analysis
+2: Regression Models
+3: R Programming
+4: Take me to the swirl course repository!
+
+Selection: 5
+  |                                                                                                                                                |   0%
+
+| Introduction to Multivariable Regression. (Slides for this and other Data Science courses may be found at github
+| https://github.com/DataScienceSpecialization/courses. If you care to use them, they must be downloaded as a zip file and viewed locally. This lesson
+| corresponds to Regression_Models/02_01_multivariate.)
+
+...
+
+  |======                                                                                                                                          |   4%
+
+| In this lesson we'll illustrate that regression in many variables amounts to a series of regressions in one. Using regression in one variable, we'll
+| show how to eliminate any chosen regressor, thus reducing a regression in N variables, to a regression in N-1. Hence, if we know how to do a regression
+| in 1 variable, we can do a regression in 2. Once we know how to do a regression in 2 variables, we can do a regression in 3, and so on. We begin with
+| the galton data and a review of eliminating the intercept by subtracting the means.
+
+...
+
+  |============                                                                                                                                    |   8%
+
+| When we perform a regression in one variable, such as lm(child ~ parent, galton), we get two coefficients, a slope and an intercept. The intercept is
+| really the coefficient of a special regressor which has the same value, 1, at every sample. The function, lm, includes this regressor by default.
+
+...
+
+  |=================                                                                                                                               |  12%
+
+| We'll demonstrate by substituting an all-ones regressor of our own. This regressor must have the same number of samples as galton (928.) Create such an
+| object and name it ones, using ones <- rep(1, nrow(galton)), or some equivalent expression.
+
+> ones <- rep(1, nrow(galton))
+
+| Great job!
+
+  |=======================                                                                                                                         |  16%
+
+| The galton data has already been loaded. The default intercept can be excluded by using -1 in the formula. Perform a regression which substitutes our
+| regressor, ones, for the default using lm(child ~ ones + parent -1, galton). Since we want the result to print, don't assign it to a variable.
+
+> lm(child ~ ones + parent -1, galton)
+
+Call:
+lm(formula = child ~ ones + parent - 1, data = galton)
+
+Coefficients:
+   ones   parent  
+23.9415   0.6463  
+
+
+| That's the answer I was looking for.
+
+  |=============================                                                                                                                   |  20%
+
+| The coefficient of ones is 23.9415. Now use the default, lm(child ~ parent, galton), to show the intercept has the same value. This time, DO NOT
+| suppress the the intercept with -1.
+
+> lm(child ~ parent, galton)
+
+Call:
+lm(formula = child ~ parent, data = galton)
+
+Coefficients:
+(Intercept)       parent  
+    23.9415       0.6463  
+
+
+| Perseverance, that's the answer.
+
+  |===================================                                                                                                             |  24%
+
+| The regression in one variable given by lm(child ~ parent, galton) really involves two regressors, the variable, parent, and a regressor of all ones.
+
+1: True
+2: False
+
+Selection: 1
+
+| Excellent job!
+
+  |========================================                                                                                                        |  28%
+
+| In earlier lessons we demonstrated that the regression line given by lm(child ~ parent, galton) goes through the point x=mean(parent), y=mean(child).
+| We also showed that if we subtract the mean from each variable, the regression line goes through the origin, x=0, y=0, hence its intercept is zero.
+| Thus, by subtracting the means, we eliminate one of the two regressors, the constant, leaving just one, parent. The coefficient of the remaining
+| regressor is the slope.
+
+...
+
+  |==============================================                                                                                                  |  32%
+
+| Subtracting the means to eliminate the intercept is a special case of a general technique which is sometimes called Gaussian Elimination. As it applies
+| here, the general technique is to pick one regressor and to replace all other variables by the residuals of their regressions against that one.
+
+...
+
+  |====================================================                                                                                            |  36%
+
+| Suppose, as claimed, that subtracting a variable's mean is a special case of replacing the variable with a residual. In this special case, it would be
+| the residual of a regression against what?
+
+1: The constant, 1
+2: The variable itself
+3: The outcome
+
+Selection: 2
+
+| One more time. You can do it!
+
+| A residual is the difference between a variable and its predicted value. If, for example, child-mean(child) is a residual, then mean(child) must be its
+| predicted value. But mean(child) is a constant, so the regressor would be a constant.
+
+1: The variable itself
+2: The constant, 1
+3: The outcome
+
+Selection: 3
+
+| That's not exactly what I'm looking for. Try again.
+
+| A residual is the difference between a variable and its predicted value. If, for example, child-mean(child) is a residual, then mean(child) must be its
+| predicted value. But mean(child) is a constant, so the regressor would be a constant.
+
+1: The variable itself
+2: The constant, 1
+3: The outcome
+
+Selection: 1
+
+| Give it another try.
+
+| A residual is the difference between a variable and its predicted value. If, for example, child-mean(child) is a residual, then mean(child) must be its
+| predicted value. But mean(child) is a constant, so the regressor would be a constant.
+
+1: The variable itself
+2: The outcome
+3: The constant, 1
+
+Selection: 3
+
+| You nailed it! Good job!
+
+  |==========================================================                                                                                      |  40%
+
+| The mean of a variable is the coefficient of its regression against the constant, 1. Thus, subtracting the mean is equivalent to replacing a variable
+| by the residual of its regression against 1. In an R formula, the constant regressor can be represented by a 1 on the right hand side. Thus, the
+| expression, lm(child ~ 1, galton), regresses child against the constant, 1. Recall that in the galton data, the mean height of a child was 68.09
+| inches. Use lm(child ~ 1, galton) to compare the resulting coefficient (the intercept) and the mean height of 68.09. Since we want the result to print,
+| don't assign it a name.
+
+> lm(child ~ 1, galton)
+
+Call:
+lm(formula = child ~ 1, data = galton)
+
+Coefficients:
+(Intercept)  
+      68.09  
+
+
+| Your dedication is inspiring!
+
+  |===============================================================                                                                                 |  44%
+
+| The mean of a variable is equal to its regression against the constant, 1.
+
+1: False
+2: True
+
+Selection: 2
+
+| You got it right!
+
+  |=====================================================================                                                                           |  48%
+
+| To illustrate the general case we'll use the trees data from the datasets package. The idea is to predict the Volume of timber which a tree might
+| produce from measurements of its Height and Girth. To avoid treating the intercept as a special case, we have added a column of 1's to the data which
+| we shall use in its place. Please take a moment to inspect the data using either View(trees) or head(trees).
+
+> View(trees)
+
+| You are really on a roll!
+
+  |===========================================================================                                                                     |  52%
+
+| A file of relevant code has been copied to your working directory and sourced. The file, elimination.R, should have appeared in your editor. If not,
+| please open it manually.
+
+...
+
+  |=================================================================================                                                               |  56%
+
+| The general technique is to pick one predictor and to replace all other variables by the residuals of their regressions against that one. The function,
+| regressOneOnOne, in eliminate.R performs the first step of this process. Given the name of a predictor and one other variable, other, it returns the
+| residual of other when regressed against predictor. In its first line, labeled Point A, it creates a formula. Suppose that predictor were 'Girth' and
+| other were 'Volume'. What formula would it create?
+
+1: Volume ~ Girth - 1
+2: Girth ~ Volume - 1
+3: Volume ~ Girth
+
+Selection: 2
+
+| Not exactly. Give it another go.
+
+| The formula would regress Volume against the single predictor, Girth, suppressing the default intercept using the convention, - 1, for the purpose.
+
+1: Girth ~ Volume - 1
+2: Volume ~ Girth - 1
+3: Volume ~ Girth
+
+Selection: 2
+
+| You got it right!
+
+  |======================================================================================                                                          |  60%
+
+| The remaining function, eliminate, applies regressOneOnOne to all variables except a given predictor and collects the residuals in a data frame. We'll
+| first show that when we eliminate one regressor from the data, a regression on the remaining will produce their correct coefficients. (Of course, the
+| coefficient of the eliminated regressor will be missing, but more about that later.)
+
+...
+
+  |============================================================================================                                                    |  64%
+
+| For reference, create a model based on all three regressors, Girth, Height, and Constant, and assign the result to a variable named fit. Use an
+| expression such as fit <- lm(Volume ~ Girth + Height + Constant -1, trees). Don't forget the -1.
+
+> fit <- lm(Volume ~ Girth + Height + Constant -1, trees)
+
+| You got it right!
+
+  |==================================================================================================                                              |  68%
+
+| Now let's eliminate Girth from the data set. Call the reduced data set trees2 to indicate it has only 2 regressors. Use the expression trees2 <-
+| eliminate("Girth", trees).
+
+> trees2 <- eliminate("Girth", trees)
+
+| Great job!
+
+  |========================================================================================================                                        |  72%
+
+| Use head(trees2) or View(trees2) to inspect the reduced data set.
+
+> head(trees2)
+   Constant   Height     Volume
+1 0.4057735 24.38809  -9.793826
+2 0.3842954 17.73947 -10.520109
+3 0.3699767 14.64038 -11.104298
+4 0.2482677 14.29818  -9.019900
+5 0.2339490 22.19910  -7.104089
+6 0.2267896 23.64956  -6.446183
+
+| All that hard work is paying off!
+
+  |=============================================================================================================                                   |  76%
+
+| Why, in trees2, is the Constant column not constant?
+
+1: The constant, 1, has been replaced by its residual when regressed against Girth.
+2: Computational precision was insufficient.
+3: There must be some mistake
+
+Selection: 1
+
+| You are doing so well!
+
+  |===================================================================================================================                             |  80%
+
+| Now create a model, called fit2, using the reduced data set. Use an expression such as fit2 <- lm(Volume ~ Height + Constant -1, trees2). Don't forget
+| to use -1 in the formula.
+
+> fit2 <- lm(Volume ~ Height + Constant -1, trees2)
+
+| You nailed it! Good job!
+
+  |=========================================================================================================================                       |  84%
+
+| Use the expression lapply(list(fit, fit2), coef) to print coefficients of fit and fit2 for comparison.
+
+> lapply(list(fit, fit2), coef)
+[[1]]
+      Girth      Height    Constant 
+  4.7081605   0.3392512 -57.9876589 
+
+[[2]]
+     Height    Constant 
+  0.3392512 -57.9876589 
+
+
+| Great job!
+
+  |===============================================================================================================================                 |  88%
+
+| The coefficient of the eliminated variable is missing, of course. One way to get it would be to go back to the original data, trees, eliminate a
+| different regressor, such as Height, and do another 2 variable regession, as above. There are much more efficient ways, but efficiency is not the point
+| of this demonstration. We have shown how to reduce a regression in 3 variables to a regression in 2. We can go further and eliminate another variable,
+| reducing a regression in 2 variables to a regression in 1.
+
+...
+
+  |====================================================================================================================================            |  92%
+
+| Here is the final step. We have used eliminate("Height", trees2) to reduce the data to the outcome, Volume, and the Constant regressor. We have
+| regressed Volume on Constant, and printed the coefficient as shown in the command above the answer. As you can see, the coefficient of Constant agrees
+| with previous values.
+
+
+Call:
+lm(formula = Volume ~ Constant - 1, data = eliminate("Height", 
+    trees2))
+
+Coefficients:
+Constant  
+  -57.99  
+
+...
+
+  |==========================================================================================================================================      |  96%
+
+| Suppose we were given a multivariable regression problem involving an outcome and N regressors, where N > 1. Using only single-variable regression, how
+| can the problem be reduced to a problem with only N-1 regressors?
+
+1: Subtract the mean from the outcome and each regressor.
+2: Pick any regressor and replace the outcome and all other regressors by their residuals against the chosen one.
+
+Selection: 2
+
+| You are really on a roll!
+
+  |================================================================================================================================================| 100%
+
+| We have illustrated that regression in many variables amounts to a series of regressions in one. The actual algorithms used by functions such as lm are
+| more efficient, but are computationally equivalent to what we have done. That is, the algorithms use equivalent steps but combine them more efficiently
+| and abstractly. This completes the lesson.
+
+...
+
+| Are you currently enrolled in the Coursera course associated with this lesson?
+
+1: Yes
+2: No
+
+Selection: 1
+
+| Would you like me to notify Coursera that you've completed this lesson? If so, I'll need to get some more info from you.
+
+1: Yes
+2: No
+3: Maybe later
+
+Selection: 1
+
+| Is the following information correct?
+
+Course ID: regmods-004
+Submission login (email): edu.private@gmail.com
+Submission password: j2gWUkyd56
+
+1: Yes, go ahead!
+2: No, I need to change something.
+
+Selection: 1
+
+| I'll try to tell Coursera you've completed this lesson now.
+
+| Great work!
+
+| I've notified Coursera that you have completed regmods-004, Introduction_to_Multivariable_Regression.
+
+| You've reached the end of this lesson! Returning to the main menu...
+
+| Please choose a course, or type 0 to exit swirl.
+
+1: Data Analysis
+2: Regression Models
+3: R Programming
+4: Take me to the swirl course repository!
