@@ -13,7 +13,7 @@ require("reshape2")
 activity_labels <- read.table("activity_labels.txt")[,2]
 features <- read.table("features.txt")[,2]
 
-# lxtract only the measurements on the mean and standard deviation for each measurement.
+# extract only the measurements on the mean and standard deviation for each measurement.
 extract_features <- grepl("mean|std", features)
 
 # load and process X_test & y_test data.
