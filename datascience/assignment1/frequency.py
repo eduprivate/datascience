@@ -3,7 +3,6 @@ import json
 import re
 
 def load_tweets(fp):
-	
 	lst = []
 	line = fp.readline()
 	while len(line) is not 0:
@@ -49,3 +48,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    
