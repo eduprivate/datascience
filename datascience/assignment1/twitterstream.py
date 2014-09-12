@@ -2,6 +2,7 @@ import oauth2 as oauth
 import urllib2 as urllib
 
 # See assignment1.html instructions or README for how to get these credentials
+# 
 
 api_key = "i18xncbi46f5aBr16W08xK6hQ"
 api_secret = "GVzARCTggC80SNZIbT0bcpILeyL5UQcnblsnu0knSt9zDBBHna"
@@ -51,8 +52,8 @@ def twitterreq(url, method, parameters):
   return response
 
 def fetchsamples():
-  url = "https://stream.twitter.com/1/statuses/sample.json?q=dilma"
-  #url = "https://api.twitter.com/1.1/search/tweets.json?q=dilma"
+  #url = "https://stream.twitter.com/1/statuses/sample.json?q=dilma"
+  url = "https://api.twitter.com/1.1/search/tweets.json?q=dilma"
   parameters = []
   response = twitterreq(url, "GET", parameters)
   for line in response:

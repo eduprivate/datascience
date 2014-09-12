@@ -13,7 +13,7 @@ class SentimentScore(object):
 	def _build_lookup(self, sent_file):
 		scores = {} 
 		for line in sent_file:
-		  term, score  = line.split("\t")  
+		  term, score  = line.split(";")  
 		  scores[term] = int(score)  
 
 		return scores
@@ -68,11 +68,11 @@ def hw():
 def lines(fp):
     print str(len(fp.readlines()))
 
-def mount_scores():
-    afinnfile = open("AFINN-111.txt")
+def mount_scores(sent_file):
+    afinnfile = open("new4.txt")
     scores = {} 
     for line in afinnfile:
-        term, score  = line.split("\t")  
+        term, score  = line.split(";")  
         scores[term] = int(score)  
     print scores.items()         
 
@@ -82,7 +82,7 @@ def main():
     hw()
     lines(sent_file)
     lines(tweet_file)
-    mount_scores()
+    mount_scores(sent_file)
     print_sentiments(sent_file, tweet_file)
 
 if __name__ == '__main__':
